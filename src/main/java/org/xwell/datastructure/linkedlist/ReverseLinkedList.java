@@ -33,7 +33,19 @@ public class ReverseLinkedList {
      * @return
      */
     public static ListNode reverseList(ListNode head) {
-        return  null;
+        // 递归终止条件是当前节点为空，或者下一个节点为空
+        if(head==null||head.next==null){
+            return head;
+        }
+
+        // curr 即反转好的头节点
+        ListNode curr = reverseList(head.next);
+        // 递归，将当前节点的下一个节点指向当前节点
+        head.next.next = head;
+        // 防止链表成环，断开
+        head.next=null;
+        // 每层递归都返回 curr，也就是反转的头指针
+        return curr;
     }
 
     /**
@@ -43,19 +55,21 @@ public class ReverseLinkedList {
      * @return
      */
     public static ListNode reverseList2(ListNode head) {
-        if(head==null||head.next==null){
+        if (head == null || head.next == null) {
             return head;
         }
-
-        ListNode prev = head;
-        ListNode cur = head.next;
-        while(prev!=null&&cur!=null){
-            ListNode next = cur.next;
-            cur.next = prev;
-            head.next = next;
-
-            prev = cur;
-            cur = next;
+        // prev 记录反转好的头结点，初始为 null
+        ListNode prev = null;
+        // curr 记录待反转的头结点，即当前节点
+        ListNode curr = head;
+        while (curr != null) {
+            // 记录当前节点的下一个节点
+            ListNode next = curr.next;
+            // 然后将当前节点指向 prev
+            curr.next = prev;
+            // prev 和 curr 节点都前进一位
+            prev = curr;
+            curr = next;
         }
         return prev;
     }
@@ -63,7 +77,7 @@ public class ReverseLinkedList {
     public static void main(String[] args) {
         ListNode head = ListUtils.stringToListNode("[1,2,3,4,5]");
 
-        ListNode result = reverseList2(head);
+        ListNode result = reverseList(head);
 
         ListUtils.prettyPrint(result);
     }
